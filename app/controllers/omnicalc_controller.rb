@@ -1,4 +1,4 @@
-class DiceController < ApplicationController
+class OmnicalcController < ApplicationController
 
   def square_new
     
@@ -30,9 +30,46 @@ class DiceController < ApplicationController
   
   end
 
+  def random_new
+    
+    render ({ :template => "omnicalc_templates/random_new" })
+  
+  end
+
+  def random_results
+    
+    @num_user_min_input = params.fetch("user_min")
+    @num_user_max_input = params.fetch("user_max")
+    @num_random_result = rand(@num_user_min_input.to_f..@num_user_max_input.to_f)
+
+    render ({ :template => "omnicalc_templates/random_results" })
+  
+  end
+
+  def payment_new
+    
+    render ({ :template => "omnicalc_templates/payment_new" })
+  
+  end
+
+  def payment_results
+    
+    @user_apr_input = params.fetch("user_apr").to_f
+    @monthly_apr = @user_apr_input / 100 / 12
+    @user_years_input = params.fetch("user_years").to_i
+    @months = @user_years_input * 12
+    @user_pv_input = params.fetch("user_pv").to_f
+    @numerator = @monthly_apr * @user_pv_input
+    @denominator = 1 - (1 + @monthly_apr) ** (@months * (-1))
+    @payment_result = @numerator / @denominator
+
+    render ({ :template => "omnicalc_templates/payment_results" })
+  
+  end
+
   def homepage
 
-    render ({ :template => "dice_templates/home" })
+    render ({ :template => "omnicalc_templates/square_new" })
   
   end
 
